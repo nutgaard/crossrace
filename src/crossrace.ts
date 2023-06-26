@@ -6,6 +6,7 @@ export interface RiderOrder {
 
 export function findOrdering(racelog: string): RiderOrder[] {
     const allPasses: string[] = racelog
+        .replace(/\t/g, ' ')
         .trim()
         .split('\n')
         .flatMap(line => line.trim().split(' '));

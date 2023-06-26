@@ -4,6 +4,18 @@ export interface RiderOrder {
     lastSeen: number;
 }
 
+export function parseRacers(racers: string): Record<string, string> {
+    return racers
+        .replace(/\t/g, ' ')
+        .trim()
+        .split('\n')
+        .map(line => line.trim().split(' '))
+        .reduce((acc, [id, ...name]) => {
+            acc[id] = name.join(' ');
+            return acc;
+        }, {} as Record<string, string>)
+}
+
 export function findOrdering(racelog: string): RiderOrder[] {
     const allPasses: string[] = racelog
         .replace(/\t/g, ' ')

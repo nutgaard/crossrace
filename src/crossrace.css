@@ -1,12 +1,17 @@
 #app {
     display: flex;
+    flex-direction: column;
+}
+.racelog {
+    display: flex;
+    flex: 1;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
     gap: 1rem;
 }
 
-#app > label {
+.racelog > label {
     display: flex;
     flex-direction: column;
     flex: 1;

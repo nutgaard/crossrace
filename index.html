@@ -8,24 +8,58 @@
 </head>
 <body>
     <header>
-        <img src="Freestyle_Motocross_pictogram.svg" class="logo"/>
+        <img src="Freestyle_Motocross_pictogram.svg" class="logo" alt="Simple motorcycle logo"/>
     </header>
     <main id="app">
-        <label for="input">
-            <span>Input</span>
-            <textarea name="input" id="input" cols="30" rows="10"></textarea>
-        </label>
-        <label for="debug">
-            <span>Debug</span>
-            <textarea name="debug" id="debug" cols="30" rows="10"></textarea>
-        </label>
-        <label for="output">
-            <span>Output</span>
-            <textarea name="output" id="output" cols="30" rows="10"></textarea>
-        </label>
+        <div class="racers">
+            <details open>
+                <summary>
+                    <span>Racers</span>
+                </summary>
+                <label for="racers" class="hidden">Racers</label>
+                <textarea name="racers" id="racers" cols="30" rows="10">
+613	Ola
+130	Per
+193	Joakim
+567	Kim Fredrik
+195	Henrik
+387	Bjørn
+308	Emil
+318	Knut
+812	Hans
+666	Nils
+                </textarea>
+            </details>
+        </div>
+        <div class="racelog">
+            <label for="input">
+                <span>Input</span>
+                <textarea name="input" id="input" cols="30" rows="10">
+130	812	666	318	195	613	193	567	387	308
+130	812	666	318	195	613	193	567	308	387
+130	812	666	318	195	613	193	567	308	387
+130	812	666	318	195	613	193	567	308
+812	130	666	318	195	613	193	567
+812	308	130	666	318	195
+812	613	193	567	130	308	318	666	195
+812	613	193	130	567	318	308	666
+812	195	130	613	193	567	318	308	666
+812	195	130	613	193	567	318	666
+812	308	130	195	613	193	567	318	666
+                </textarea>
+            </label>
+            <label for="debug">
+                <span>Debug</span>
+                <textarea name="debug" id="debug" cols="30" rows="10"></textarea>
+            </label>
+            <label for="output">
+                <span>Output</span>
+                <textarea name="output" id="output" cols="30" rows="10"></textarea>
+            </label>
+        </div>
     </main>
     <footer>
-        <img src="Freestyle_Motocross_pictogram.svg" class="logo logo__right"/>
+        <img src="Freestyle_Motocross_pictogram.svg" class="logo logo__right" alt="Simple motorcycle logo"/>
     </footer>
 <script type="module" src="/src/main.ts"></script>
 </body>

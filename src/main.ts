@@ -1,25 +1,31 @@
 import './style.css';
 import './crossrace.css';
-import {findOrdering} from "./crossrace";
+import {findOrdering, parseRacers} from "./crossrace";
 
 const input = document.getElementById('input') as HTMLTextAreaElement;
 const debug = document.getElementById('debug') as HTMLTextAreaElement;
 const output = document.getElementById('output') as HTMLTextAreaElement;
+const racersInput = document.getElementById('racers') as HTMLTextAreaElement;
+
+let racers = parseRacers(racersInput.value);
+let ordering = findOrdering(input.value);
+updateOutput();
 
 input.addEventListener('input', (e) => {
     const target = e.target as HTMLTextAreaElement;
-    findOrderingAndUpdate(target.value);
-})
+    ordering = findOrdering(target.value);
+    updateOutput();
+});
 
-input.value = `
-1 2 3
-1 3
-1 2
-`.trim();
-findOrderingAndUpdate(input.value);
+racersInput.addEventListener('input', (e) => {
+    const target = e.target as HTMLTextAreaElement;
+    racers = parseRacers(target.value);
+    console.log('racers', racers);
+    updateOutput();
+});
 
-function findOrderingAndUpdate(value: string) {
-    const ordering = findOrdering(value);
+function updateOutput() {
     debug.value = JSON.stringify(ordering, null, 2);
-    output.value = ordering.map(it => it.rider).join('\n');
+    output.value = ordering
+        .map(it => `${it.rider} ${racers[it.rider] ?? '???'}`).join('\n');
 }

@@ -8,7 +8,7 @@ export function findOrdering(racelog: string): RiderOrder[] {
     const allPasses: string[] = racelog
         .trim()
         .split('\n')
-        .flatMap(line => line.split(' '));
+        .flatMap(line => line.trim().split(' '));
 
     const countedPasses: Record<string, number> = allPasses
         .reduce(countOccurrences, {});
@@ -21,7 +21,7 @@ export function findOrdering(racelog: string): RiderOrder[] {
         }))
         .sort((riderA, riderB) => {
             const lapsDiff = riderB.numberOfLaps - riderA.numberOfLaps;
-            if (lapsDiff > 0) { return lapsDiff; }
+            if (lapsDiff !== 0) { return lapsDiff; }
 
             return riderA.lastSeen - riderB.lastSeen;
         });

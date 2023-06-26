@@ -1,0 +1,35 @@
+name: Releases
+
+on:
+  push:
+    tags:
+      - '*'
+
+concurrency:
+  group: "release"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Tests
+        run: npm t
+      - name: Build
+        run: npm run build
+      - name: Create zip files
+        run: zip -r dist.zip dist
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "dist.zip"
+          makeLatest: true

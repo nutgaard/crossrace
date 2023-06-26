@@ -26,6 +26,8 @@ jobs:
       - name: Tests
         run: npm t
       - name: Build
+        env:
+          ZIP_DISTRIBUTION: true
         run: npm run build
       - name: Create zip files
         run: zip -r dist.zip dist

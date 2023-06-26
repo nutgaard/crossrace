@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-    base: 'crossrace'
+    base: process.env.ZIP_DISTRIBUTION === 'true' ? '' : 'crossrace'
 })

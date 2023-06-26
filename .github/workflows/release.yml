@@ -30,7 +30,9 @@ jobs:
           ZIP_DISTRIBUTION: true
         run: npm run build
       - name: Create zip files
-        run: zip -r dist.zip dist
+        run: |
+          node inline-resources.cjs dist/index.html dist/index.html
+          zip -r dist.zip dist
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "dist.zip"

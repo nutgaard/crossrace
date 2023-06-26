@@ -1,0 +1,23 @@
+#app {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+#app > label {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+label > span {
+    display: block;
+    font-weight: 600;
+}
+
+label > textarea {
+    width: 100%;
+    flex: 1;
+}

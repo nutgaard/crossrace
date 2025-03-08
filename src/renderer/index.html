@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Crossracer</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+    />
+
+    <link href="./assets/main.css" type="text/css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <header>
+      <img alt="logo" class="logo" src="./assets/Freestyle_Motocross_pictogram.svg" />
+      <h1>Crossracer</h1>
+    </header>
+    <main>
+      <div class="racers">
+        <details open>
+          <summary>Racers</summary>
+          <label>
+            <span class="sr-only">Racers</span>
+            <textarea name="racers" id="racers" cols="30" rows="10"></textarea>
+          </label>
+        </details>
+      </div>
+      <div class="racelog">
+        <label for="input">
+          <span>Input</span>
+          <textarea name="input" id="input" cols="30" rows="10"></textarea>
+        </label>
+        <label for="debug">
+          <span>Debug</span>
+          <textarea name="debug" id="debug" cols="30" rows="10"></textarea>
+        </label>
+        <label for="output">
+          <span>Output</span>
+          <textarea name="output" id="output" cols="30" rows="10"></textarea>
+        </label>
+      </div>
+      <div class="errors"></div>
+    </main>
+    <footer>
+      <ul class="versions">
+        <li class="electron-version"></li>
+        <li class="chrome-version"></li>
+        <li class="node-version"></li>
+        <li>© utgdev</li>
+      </ul>
+    </footer>
+    <div class="toaststack"></div>
+    <script type="module" src="./src/renderer.ts"></script>
+  </body>
+</html>

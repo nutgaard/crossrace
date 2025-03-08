@@ -1,0 +1,130 @@
+@import './base.css';
+@import './toast.css';
+
+body {
+  display: grid;
+  grid-template-areas: "header" "main" "footer";
+  grid-gap: 1rem;
+  grid-template-rows: auto 1fr auto;
+  padding: 1rem;
+  overflow: hidden;
+  background-image: url('./wavy-lines.svg');
+  background-size: cover;
+  user-select: none;
+}
+
+header {
+  grid-area: header;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  h1 {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+  }
+}
+
+main {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  grid-area: footer;
+}
+
+.logo {
+  -webkit-user-drag: none;
+  height: 3rem;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 1.2em #6988e6aa);
+}
+
+.errors {
+  color: #f23d43;
+
+  a {
+    color: #d6c8c8;
+  }
+}
+
+.versions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 6px 0;
+  border-radius: 0 8px 0 0;
+  background-color: var(--ev-c-gray-3);
+  font-size: 12px;
+  line-height: 12px;
+  font-family: 'Menlo', 'Lucida Console', monospace;
+
+  @media (max-width: 620px) {
+    display: none;
+  }
+
+  li {
+    display: block;
+    float: left;
+    border-right: 1px solid var(--ev-c-gray-1);
+    padding: 0 20px;
+    opacity: 0.8;
+
+    &:last-child {
+      border: none;
+    }
+  }
+}
+
+textarea {
+  background-color: color-mix(in srgb, var(--ev-c-gray-3) 60%, transparent);
+  border-radius: 4px;
+  border-color: var(--ev-c-gray-1);
+  padding: 4px;
+  color: white;
+  resize: none;
+}
+
+.racers {
+  width: 100%;
+
+  textarea {
+    width: 100%;
+  }
+}
+
+.racelog {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 1rem;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    span {
+      display: block;
+      font-weight: 600;
+    }
+
+    textarea {
+      width: 100%;
+      flex: 1;
+    }
+  }
+}
+
+.sr-only {
+  position: absolute;
+  left: -9999px;
+}

@@ -1,0 +1,43 @@
+.toaststack {
+  position: absolute;
+  bottom: 0rem;
+  right: 1rem;
+}
+
+.toast {
+  padding: 0.5rem 0.75rem;
+  background-color: color-mix(in srgb, var(--bgColor) 70%, transparent);
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  max-width: 20rem;
+  width: 100%;
+
+  animation-name: fadeIn, fadeOut;
+  animation-duration: 1s, 1s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: forwards, forwards;
+
+  h1 {
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+  }
+
+  &.toast__success {
+    --bgColor: #30bf32;
+  }
+  &.toast__error {
+    --bgColor: #bf3041;
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}

@@ -48,7 +48,7 @@ jobs:
         with:
           tag_name: ${{ github.event.release.tag_name }}
           files: |
-            "dist/Crossracer ${{ env.VERSION }}.exe"
+            dist/Crossracer ${{ env.VERSION }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

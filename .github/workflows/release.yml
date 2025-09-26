@@ -13,6 +13,10 @@ env:
 
 jobs:
   build-windows:
+    if: >
+      github.event.action == 'prereleased' ||
+      (github.event.action == 'published' && !github.event.release.prerelease) ||
+      github.event.action == 'released'
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -53,6 +57,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-macos:
+    if: >
+      github.event.action == 'prereleased' ||
+      (github.event.action == 'published' && !github.event.release.prerelease) ||
+      github.event.action == 'released'
     runs-on: macos-latest
     steps:
       - name: Checkout

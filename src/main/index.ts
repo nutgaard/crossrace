@@ -7,7 +7,7 @@ import {
   CREATE_NEW, DIRTY_CONTENT,
   SAVE_REQUEST,
   SAVE_RESPONSE, SAVE_SUCCESS,
-  SET_CONTENT,
+  SET_CONTENT, TOGGLE_DEBUG,
 } from '../common/ipc-commands';
 
 function createWindow(): void {
@@ -128,6 +128,20 @@ function createWindow(): void {
           },
         },
         {
+          label: 'Print',
+          accelerator: 'CmdOrCtrl+P',
+          click(): void {
+            mainWindow.webContents.print();
+          }
+        },
+        {
+          label: 'Show debug calculations',
+          accelerator: 'CmdOrCtrl+D',
+          click(): void {
+            mainWindow.webContents.send(TOGGLE_DEBUG);
+          }
+        },
+        {
           label: 'Exit',
           accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Alt+F4',
           click(): void {
@@ -148,6 +162,7 @@ function createWindow(): void {
     },
   ]);
   mainWindow.setMenu(menu);
+  Menu.setApplicationMenu(menu);
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);

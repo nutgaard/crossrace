@@ -128,3 +128,19 @@ textarea {
   position: absolute;
   left: -9999px;
 }
+
+.hidden {
+  display: none !important;
+}
+
+@media print {
+  textarea {
+    overflow: hidden !important; /* Hide scrollbars during printing */
+    resize: none !important; /* Prevent resizing during printing */
+    height: auto !important; /* Allow textarea to expand to fit content */
+  }
+  ::details-content {
+    content-visibility: visible;
+    height: auto !important;
+  }
+}

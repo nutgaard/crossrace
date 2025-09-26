@@ -1,11 +1,11 @@
 import { findOrdering, findUnrecognizedDrivers, parseRacers, RiderOrder } from './crossrace';
 import {
   CREATE_NEW,
-  DIRTY_CONTENT,
+  DIRTY_CONTENT, PRINT_REQUEST,
   SAVE_REQUEST,
   SAVE_RESPONSE,
   SAVE_SUCCESS,
-  SET_CONTENT,
+  SET_CONTENT, TOGGLE_DEBUG,
 } from '../../common/ipc-commands';
 import { Toaststack } from './toaststack';
 import { debounce } from './utils';
@@ -30,6 +30,7 @@ function runApp(): void {
     data: '',
   };
   const inputEl = document.getElementById('input') as HTMLTextAreaElement;
+  const debugLabel = document.querySelector('[for=debug]') as HTMLLabelElement;
   const debugEl = document.getElementById('debug') as HTMLTextAreaElement;
   const outputEl = document.getElementById('output') as HTMLTextAreaElement;
   const racersEl = document.getElementById('racers') as HTMLTextAreaElement;
@@ -75,6 +76,19 @@ function runApp(): void {
     inputEl.value = '';
     racersEl.value = '';
     runCalculations();
+  });
+
+  window.electron.ipcRenderer.on(PRINT_REQUEST, () => {
+    window.print();
+  });
+
+  window.electron.ipcRenderer.on(TOGGLE_DEBUG, () => {
+    const hidden = debugLabel.classList.contains('hidden');
+    if (hidden) {
+      debugLabel.classList.remove('hidden');
+    } else {
+      debugLabel.classList.add('hidden')
+    }
   });
 
   errorsEl.addEventListener('click', (e: MouseEvent) => {

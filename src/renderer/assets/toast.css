@@ -41,3 +41,9 @@
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
+
+@media print {
+  .toast {
+    display: none !important;
+  }
+}

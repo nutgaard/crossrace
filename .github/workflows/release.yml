@@ -1,0 +1,107 @@
+name: Build & Attach Release Artifacts
+
+on:
+  release:
+    types: [prereleased, published, released]
+
+permissions:
+  contents: write
+
+env:
+  VERSION: ${{ github.event.release.tag_name }}
+  IS_PRERELEASE: ${{ github.event.release.prerelease }}
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compute artifact suffix
+        id: suffix
+        shell: bash
+        run: |
+          if [ "${IS_PRERELEASE}" = "true" ]; then
+            echo "SUFFIX=-beta" >> "$GITHUB_OUTPUT"
+          else
+            echo "SUFFIX=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install deps
+        run: bun install --frozen-lockfile
+
+      - name: Set package.json version from tag
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          # strip leading "v" if your tags are like "v1.2.3"
+          CLEAN_VERSION="${VERSION#v}"
+          echo "Setting package.json version to $CLEAN_VERSION"
+          npm version "$CLEAN_VERSION" --no-git-tag-version
+
+      - name: Build (Windows)
+        run: bun run build:win
+
+      - name: Upload Windows artifact(s)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: |
+            "dist/Crossracer ${{ env.VERSION }}${{ steps.suffix.outputs.SUFFIX }}.exe"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compute artifact suffix
+        id: suffix
+        shell: bash
+        run: |
+          if [ "${IS_PRERELEASE}" = "true" ]; then
+            echo "SUFFIX=-beta" >> "$GITHUB_OUTPUT"
+          else
+            echo "SUFFIX=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install deps
+        run: bun install --frozen-lockfile
+
+      - name: Set package.json version from tag
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          # strip leading "v" if your tags are like "v1.2.3"
+          CLEAN_VERSION="${VERSION#v}"
+          echo "Setting package.json version to $CLEAN_VERSION"
+          npm version "$CLEAN_VERSION" --no-git-tag-version
+
+      - name: Build (macOS)
+        run: bun run build:mac
+
+      - name: Upload macOS artifact(s)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: |
+            dist/crossracer-${{ env.VERSION }}${{ steps.suffix.outputs.SUFFIX }}.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

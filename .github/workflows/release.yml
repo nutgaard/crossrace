@@ -51,7 +51,7 @@ jobs:
       - name: Build (Windows)
         run: |
           bun run build
-          electron-builder --win --publish=never
+          bunx electron-builder --win --publish=never
 
       - name: Upload Windows artifact(s)
         uses: softprops/action-gh-release@v2
@@ -101,7 +101,7 @@ jobs:
       - name: Build (macOS)
         run: |
           bun run build
-          electron-builder --mac --publish=never
+          bunx electron-builder --mac --publish=never
 
       - name: Upload macOS artifact(s)
         uses: softprops/action-gh-release@v2

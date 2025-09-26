@@ -40,6 +40,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Set package.json version from tag
+        shell: bash
         run: |
           VERSION="${{ github.event.release.tag_name }}"
           # strip leading "v" if your tags are like "v1.2.3"
@@ -48,7 +49,9 @@ jobs:
           npm version "$CLEAN_VERSION" --no-git-tag-version
 
       - name: Build (Windows)
-        run: bun run build:win
+        run: |
+          bun run build
+          electron-builder --win --publish=never
 
       - name: Upload Windows artifact(s)
         uses: softprops/action-gh-release@v2
@@ -87,6 +90,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Set package.json version from tag
+        shell: bash
         run: |
           VERSION="${{ github.event.release.tag_name }}"
           # strip leading "v" if your tags are like "v1.2.3"
@@ -95,7 +99,9 @@ jobs:
           npm version "$CLEAN_VERSION" --no-git-tag-version
 
       - name: Build (macOS)
-        run: bun run build:mac
+        run: |
+          bun run build
+          electron-builder --mac --publish=never
 
       - name: Upload macOS artifact(s)
         uses: softprops/action-gh-release@v2

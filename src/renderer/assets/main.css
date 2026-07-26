@@ -199,3 +199,45 @@ textarea, input[type=search] {
     transform: none !important;
   }
 }
+
+@media print {
+  .report {
+    width: 210mm;
+    box-sizing: border-box;
+  }
+}
+
+html.png-export,
+html.png-export body {
+  margin: 1rem;
+  padding: 1rem;
+}
+
+html.png-export .report {
+  width: 794px;
+  max-width: 794px;
+  box-sizing: border-box;
+}
+
+@media print {
+  html,
+  body {
+    background: white !important;
+    background-image: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: white !important;
+    background-image: none !important;
+  }
+}
+
+html.png-export *:hover,
+html.png-export *:focus,
+html.png-export *:focus-visible,
+html.png-export *:active {
+  outline: none !important;
+  box-shadow: none !important;
+}

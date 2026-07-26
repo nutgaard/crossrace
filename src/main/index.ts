@@ -139,28 +139,73 @@ function createWindow(): void {
           label: 'Export PNG',
           accelerator: 'CmdOrCtrl+E',
           async click(): Promise<void> {
-            mainWindow.webContents.debugger.attach();
-            await mainWindow.webContents.debugger.sendCommand('Emulation.setEmulatedMedia', {
-              media: 'print',
-            });
-            await mainWindow.webContents.executeJavaScript(`
-            new Promise(resolve => {
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(resolve);
-                });
-            })
-            `);
-            const image = await mainWindow.webContents.capturePage();
-            const filename: string | undefined = dialog.showSaveDialogSync(mainWindow, {
+            const debuggerApi = mainWindow.webContents.debugger;
+            const filename = dialog.showSaveDialogSync(mainWindow, {
               title: 'Save Crossracer PNG',
               message: 'Save Crossracer PNG',
+              defaultPath: 'crossracer.png',
               filters: [{ name: 'crossracer', extensions: ['png'] }],
             });
-            writeFileSync(filename, image.toPNG());
-            await mainWindow.webContents.debugger.sendCommand('Emulation.setEmulatedMedia', {
-              media: 'screen',
-            });
-            mainWindow.webContents.debugger.detach();
+
+            if (!filename) return;
+
+            try {
+              debuggerApi.attach();
+              await debuggerApi.sendCommand('Emulation.setEmulatedMedia', { media: 'print' });
+
+              await mainWindow.webContents.executeJavaScript(`
+                new Promise(resolve => {
+                  document.documentElement.classList.add('png-export');
+
+                  // Remove keyboard focus.
+                  if (document.activeElement instanceof HTMLElement) {
+                    document.activeElement.blur();
+                  }
+
+                  requestAnimationFrame(() => {
+                    requestAnimationFrame(resolve);
+                  });
+                });
+              `);
+              const rectangle = await mainWindow.webContents.executeJavaScript(`
+                new Promise(resolve => {
+                  requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                      const element = document.querySelector('.report');
+
+                      if (!element) {
+                        throw new Error('Could not find .report');
+                      }
+
+                      const rect = element.getBoundingClientRect();
+
+                      resolve({
+                        x: Math.floor(rect.left),
+                        y: Math.floor(rect.top),
+                        width: Math.ceil(rect.width),
+                        height: Math.ceil(rect.height),
+                      });
+                    });
+                  });
+                })
+              `);
+
+              const image = await mainWindow.webContents.capturePage(rectangle);
+
+              writeFileSync(filename, image.toPNG());
+            } finally {
+              await mainWindow.webContents.executeJavaScript(`
+                document.documentElement.classList.remove('png-export');
+
+                new Promise(resolve => {
+                  requestAnimationFrame(() => {
+                    requestAnimationFrame(resolve);
+                  });
+                });
+              `);
+              await debuggerApi.sendCommand('Emulation.setEmulatedMedia', { media: 'screen' });
+              debuggerApi.detach();
+            }
           },
         },
         {

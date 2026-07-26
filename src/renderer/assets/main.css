@@ -164,6 +164,9 @@ textarea, input[type=search] {
 }
 
 @media print {
+  * {
+    color: black !important;
+  }
   textarea {
     overflow: hidden !important; /* Hide scrollbars during printing */
     resize: none !important; /* Prevent resizing during printing */
@@ -172,5 +175,12 @@ textarea, input[type=search] {
   ::details-content {
     content-visibility: visible;
     height: auto !important;
+  }
+
+  .racers,label[for=input],label[for=debug],#output_filter {
+    display: none;
+  }
+  .filename {
+    display: inline !important;
   }
 }

@@ -117,6 +117,9 @@ function runApp(): void {
     debugEl.value = JSON.stringify(ordering, null, 2);
     outputEl.value = ordering
       .map(it => `${it.rider} ${racers[it.rider] ?? '???'}`).join('\n');
+      .map((it) => `${it.rider} ${racers[it.rider] ?? '???'}`)
+      .map((it, i) => `${(i + 1).toString().padStart(2, ' ')}. ${it}`)
+      .join('\n');
   }
 
   function updateError(unrecognizedRacers: string[]): void {

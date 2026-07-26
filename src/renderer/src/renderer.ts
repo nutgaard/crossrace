@@ -33,6 +33,8 @@ function runApp(): void {
   const debugLabel = document.querySelector('[for=debug]') as HTMLLabelElement;
   const debugEl = document.getElementById('debug') as HTMLTextAreaElement;
   const outputEl = document.getElementById('output') as HTMLTextAreaElement;
+  const outputFilterEl = document.getElementById('output_filter') as HTMLInputElement;
+  const filenameEl = document.getElementById('filename') as HTMLSpanElement;
   const racersEl = document.getElementById('racers') as HTMLTextAreaElement;
   const errorsEl = document.querySelector('.errors') as HTMLDivElement;
   const toaststack = new Toaststack();
@@ -41,11 +43,13 @@ function runApp(): void {
   runCalculations();
   inputEl.addEventListener('input', runCalculations);
   racersEl.addEventListener('input', runCalculations);
+  outputFilterEl.addEventListener('input', runCalculations);
 
   window.electron.ipcRenderer.on(SET_CONTENT, (_, { filename, content }) => {
     contentFileFromFile = structuredClone(content);
     racersEl.value = content.racers;
     inputEl.value = content.data;
+    filenameEl.textContent = ` - ${filename}`;
     runCalculations();
     toaststack.appendSuccess('Opened file', `Opened ${filename}`);
   });
@@ -59,7 +63,7 @@ function runApp(): void {
     window.electron.ipcRenderer.send(SAVE_RESPONSE, {
       filename,
       content
-    })
+    });
   });
 
   window.electron.ipcRenderer.on(SAVE_SUCCESS, (_, filename) => {
@@ -68,6 +72,7 @@ function runApp(): void {
       racers: racersEl.value,
       data: inputEl.value,
     };
+    filenameEl.textContent = ` - ${filename}`;
     dirtyCheck();
   });
 
@@ -75,6 +80,7 @@ function runApp(): void {
     toaststack.appendSuccess('New file');
     inputEl.value = '';
     racersEl.value = '';
+    filenameEl.textContent = ``;
     runCalculations();
   });
 
@@ -105,19 +111,20 @@ function runApp(): void {
     const racers = parseRacers(racersEl.value);
     const ordering = findOrdering(inputEl.value);
     const unrecognizedRacers = findUnrecognizedDrivers(inputEl.value, racersEl.value);
+    const filter = outputFilterEl.value;
     dirtyCheck();
-    updateOutput(racers, ordering);
+    updateOutput(racers, ordering, filter);
     updateErrorDebounced(unrecognizedRacers);
   }
 
-  function updateOutput(
-    racers: Record<string, string>,
-    ordering: RiderOrder[],
-  ): void {
+  function updateOutput(racers: Record<string, string>, ordering: RiderOrder[], filter: string): void {
     debugEl.value = JSON.stringify(ordering, null, 2);
     outputEl.value = ordering
-      .map(it => `${it.rider} ${racers[it.rider] ?? '???'}`).join('\n');
       .map((it) => `${it.rider} ${racers[it.rider] ?? '???'}`)
+      .filter(it => {
+        if (filter.length === 0) return true;
+        return it.toLowerCase().includes(filter.toLowerCase());
+      })
       .map((it, i) => `${(i + 1).toString().padStart(2, ' ')}. ${it}`)
       .join('\n');
   }

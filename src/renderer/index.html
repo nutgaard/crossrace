@@ -28,7 +28,9 @@
       </div>
       <div class="racelog">
         <label for="input">
-          <span>Race log</span>
+          <div class="flex">
+            <span>Race log</span>
+          </div>
           <textarea name="input" id="input" cols="30" rows="10"></textarea>
         </label>
         <label for="debug" class="hidden">
@@ -37,6 +39,10 @@
         </label>
         <label for="output">
           <span>Race result</span>
+          <div class="flex">
+            <span>Race result</span>
+            <input type="search" id="output_filter">
+          </div>
           <textarea name="output" id="output" cols="30" rows="10"></textarea>
         </label>
       </div>

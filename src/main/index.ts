@@ -151,7 +151,12 @@ function createWindow(): void {
             })
             `);
             const image = await mainWindow.webContents.capturePage();
-            writeFileSync('screenshot.png', image.toPNG());
+            const filename: string | undefined = dialog.showSaveDialogSync(mainWindow, {
+              title: 'Save Crossracer PNG',
+              message: 'Save Crossracer PNG',
+              filters: [{ name: 'crossracer', extensions: ['png'] }],
+            });
+            writeFileSync(filename, image.toPNG());
             await mainWindow.webContents.debugger.sendCommand('Emulation.setEmulatedMedia', {
               media: 'screen',
             });

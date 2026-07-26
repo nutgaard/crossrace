@@ -9,9 +9,13 @@ import {
 } from '../../common/ipc-commands';
 import { Toaststack } from './toaststack';
 import { debounce } from './utils';
+// @ts-ignore Just importing a type
+import type { Api } from '../../preload/index';
 
-function insertVersions(): void {
+async function insertVersions(): Promise<void> {
   const versions = window.electron.process.versions
+  const api = window.api as Api;
+  replaceText('.app-version', `v${await api.getVersion()}`);
   replaceText('.electron-version', `Electron v${versions.electron}`)
   replaceText('.chrome-version', `Chromium v${versions.chrome}`)
   replaceText('.node-version', `Node v${versions.node}`)

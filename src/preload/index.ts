@@ -1,8 +1,10 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
+export type Api = typeof api;
 // Custom APIs for renderer
 const api = {
+  getVersion: (): Promise<string> => ipcRenderer.invoke('app:getVersion')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

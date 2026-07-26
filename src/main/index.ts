@@ -9,6 +9,7 @@ import {
   SAVE_RESPONSE, SAVE_SUCCESS,
   SET_CONTENT, TOGGLE_DEBUG,
 } from '../common/ipc-commands';
+import { writeFileSync } from 'node:fs';
 
 function createWindow(): void {
   let contentIsDirty: boolean = false;
@@ -133,6 +134,29 @@ function createWindow(): void {
           click(): void {
             mainWindow.webContents.print();
           }
+        },
+        {
+          label: 'Export PNG',
+          accelerator: 'CmdOrCtrl+E',
+          async click(): Promise<void> {
+            mainWindow.webContents.debugger.attach();
+            await mainWindow.webContents.debugger.sendCommand('Emulation.setEmulatedMedia', {
+              media: 'print',
+            });
+            await mainWindow.webContents.executeJavaScript(`
+            new Promise(resolve => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(resolve);
+                });
+            })
+            `);
+            const image = await mainWindow.webContents.capturePage();
+            writeFileSync('screenshot.png', image.toPNG());
+            await mainWindow.webContents.debugger.sendCommand('Emulation.setEmulatedMedia', {
+              media: 'screen',
+            });
+            mainWindow.webContents.debugger.detach();
+          },
         },
         {
           label: 'Show debug calculations',

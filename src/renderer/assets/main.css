@@ -183,4 +183,19 @@ textarea, input[type=search] {
   .filename {
     display: inline !important;
   }
+
+  a:hover,
+  a:focus,
+  button:hover,
+  button:focus,
+  *:hover,
+  *:focus {
+    color: inherit !important;
+    background: transparent !important;
+    border-color: inherit !important;
+    outline: none !important;
+    box-shadow: none !important;
+    text-decoration: inherit !important;
+    transform: none !important;
+  }
 }
